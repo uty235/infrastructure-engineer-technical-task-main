@@ -1,6 +1,6 @@
 FROM node:alpine
-WORKDIR /build/application
 COPY package*.json .
+WORKDIR /build/application
 RUN npm install
 COPY . .
 RUN npm run build
