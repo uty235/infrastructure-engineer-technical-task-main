@@ -1,53 +1,37 @@
-name: Docker
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
+---
+name: docker
 on:
-  schedule:
-    - cron: '38 10 * * *'
   push:
-    branches: [ "main" ]
-    # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
-  pull_request:
-    branches: [ "main" ]
-
-env:
-  # Use docker.io for Docker Hub if empty
-  REGISTRY: ghcr.io
-  # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ github.repository }}
-
-
+    branches: [ main ]
 jobs:
   build:
-
+    name: Build and Push to GCP
     runs-on: ubuntu-latest
-
+    env:
+      IMAGE_NAME: sisu-tech
+      PROJECT_ID: infrastructure-task
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    
+    - uses: google-github-actions/setup-gcloud@main
+      with: 
+        service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+        project_id: ${{ env.project.id }}
+        export_default_credentials: true
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d 
-        with:
-          username: ${{ DOCKER_USER }}
-          password: ${{ DOCKER_PASSWORD }}
+    - name: Build Docker Image
+      run: docker build -t $IMAGE_NAME:latest .
 
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934
-        with:
-          images: sise-tech
+    - name: Configure Docker Client
+      run: |-
+        gcloud auth configure-docker --quite
 
-      - name: Build and push Docker image
-        id: build-and-push
-        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+    - name: Push Docker Image to GCR
+      env:
+        GIT_TAG: v0.1.0
+      run: |- 
+        docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
+        docker tag $IMAGE_NAME:latest gcr.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
+        docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:latest
+        docker push gcr.io/$PROJECT_ID/$IMAGE_NAME:$GIT_TAG
