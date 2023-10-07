@@ -21,6 +21,6 @@ steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['beta', 'run', 'deploy', 'pipelinedemoapp', '--image', 'gcr.io/$PROJECT_ID/pipelinedemoapp:${SHORT_SHA}', '--region', 'us-central1', '--allow-unauthenticated', '--platform', 'managed']
   env:
-  - 'PORT=8080'
+  - 'PORT=3000'
 images:
 - gcr.io/$PROJECT_ID/sisu-tech
