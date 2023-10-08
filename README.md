@@ -51,10 +51,10 @@ Other configuration can be decided by yourself, based on the instance being used
 ## Questions
 
  1. How long did you spend on this assessment in total?\
- _
+ In around 4  hourse, because i didn't have a lot experience with typescript and didn't have experience with GCP
 
  2. What was the most difficult task?\
- _
+ 2
 
  3. If you had an unlimited amount of time to complete this task, what would you have done differently?\
- _
+ I think i will try to create module for terraform to create all those resources faster
