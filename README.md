@@ -51,7 +51,7 @@ Other configuration can be decided by yourself, based on the instance being used
 ## Questions
 
  1. How long did you spend on this assessment in total?\
- In around 4  hourse, because i didn't have a lot experience with typescript and didn't have experience with GCP
+ In around 4  hours, because i didn't have a lot experience with typescript and didn't have experience with GCP
 
  2. What was the most difficult task?\
  2
