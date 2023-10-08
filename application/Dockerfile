@@ -1,9 +1,19 @@
 FROM node:alpine
-COPY package*.json .
-WORKDIR /build/application
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy package.json and package-lock.json to the container
+COPY package*.json ./
+
+# Install app dependencies
 RUN npm install
+
+# Copy the rest of the application code
 COPY . .
-RUN npm i
-RUN npm run build
+
+# Expose the port your app will run on
 EXPOSE 3000
-CMD ["node", "./build/index.js"]
+
+# Start the TypeScript server
+CMD ["npm", "start"]

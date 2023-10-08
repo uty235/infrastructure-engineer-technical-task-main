@@ -16,6 +16,6 @@ spec:
         spec:
             containers:
                 - name: express
-                  image: europe-north1-docker.pkg.dev/sisu-tech/docker-registry/express:latest
+                  image: gcr.io/infrastructure-task/sisu-tech:latest
                   ports:
                       - containerPort: 3000
